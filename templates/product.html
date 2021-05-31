@@ -1,0 +1,93 @@
+{% extends "layout.html" %} {% block title %} Index {% endblock %} {% block body
+%}
+
+<!--  -->
+
+<div class="container">
+  <div class="navbar">
+    <div class="logo">
+      <img src="static/images/Vendor.png" width="125px" />
+    </div>
+    <nav>
+      <ul id="MenuItems">
+        <li><a href="{{url_for('index')}}">Home</a></li>
+        <li><a href="">Products</a></li>
+        <li>
+          <a href="">Sign In ▾</a>
+          <ul class="dropdown">
+            <li><a href="{{url_for('login')}}">Vendor</a></li>
+            <li><a href="#">Customer</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <a href="{{url_for('cart')}}">
+      <img src="static/images/cart.png" width="30px" height="30px" />
+    </a>
+    <h1 class="addCart"></h1>
+  </div>
+</div>
+
+
+{% if rows %}
+
+<div class="small-container">
+  {% for row in rows %}
+  <div class="row1">
+    <div class="col-4">
+      <img src="{{ url_for('static_dir', path = 'images/'+row.filename) }}" />
+      <h4>{{row.name}}</h4>
+      <p>GHS {{row.price}} .00</p>
+      <button href="" class="btn">Add to Basket</button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+<style>
+  .navbar h1:after {
+    content: attr(data-count); 
+  }
+  .addCart{
+    font-size: medium;
+    /* font-weight:lighter; */
+  }
+</style>
+
+<script>
+  var noti = document.querySelector("h1");
+
+  var button = document.getElementsByTagName("button");
+  for (but of button) {
+    but.addEventListener("click", (e) => {
+      var add = Number(noti.getAttribute("data-count"));
+      console.log(add);
+      noti.setAttribute("data-count", add + 1);
+      noti.classList.add("zero");
+    });
+  }
+</script>
+
+<!-- <div class="col-4">
+      <img src="static/images/product-2.jpg" />
+      <h4>Dress</h4>
+      <p>Ghc 120</p>
+      <a href="" class="btn">Add to Basket</a>
+    </div>
+
+    <div class="col-4">
+      <img src="static/images/product-3.jpg" />
+      <h4>Skirt</h4>
+      <p>Ghc 50</p>
+      <a href="" class="btn">Add to Basket</a>
+    </div>
+
+    <div class="col-4">
+      <img src="static/images/product-4.jpg" />
+      <h4>African top</h4>
+      <p>Ghc 50</p>
+      <a href="" class="btn">Add to Basket</a>
+    </div>
+  </div> -->
+
+{% endblock %}
