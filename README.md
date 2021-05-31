@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 A simple module for an e-commerce site
 Make sure you have sqlalchemy installed
 if not then run the following command in your terminal
@@ -8,3 +9,8 @@ to run the application set enviornment variables in your terminal as follows
   set FLASK_DEBUG=1
 and then finally
   flask run
+=======
+# E-commerce-Site
+An E-commerce site that allows vendors to display their products for sale, and customers to purchase products.
+hello
+>>>>>>> 76e4cdce0baebffc68a877cfa41ac4a716b0b9f6
