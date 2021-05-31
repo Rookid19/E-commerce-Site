@@ -13,4 +13,9 @@ and then finally
 # E-commerce-Site
 An E-commerce site that allows vendors to display their products for sale, and customers to purchase products.
 hello
+<<<<<<< HEAD
 >>>>>>> 76e4cdce0baebffc68a877cfa41ac4a716b0b9f6
+=======
+
+this is my change
+>>>>>>> c5280e9d6c90d196242f77a6cdacc5850a0cf2a2

@@ -284,3 +284,7 @@ ul li ul.dropdown li {
 h1 ::after {
   content: attr(data-count);
 }
+
+hr.solid {
+  border-top: 2px solid rgb(117, 86, 86);
+}
