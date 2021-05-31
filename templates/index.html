@@ -30,13 +30,13 @@
           <li>
             <a href="">Sign In ▾</a>
             <ul class="dropdown">
-              <li><a href="{{url_for('login')}}">Vendor</a></li>
-              <li><a href="#">Customer</a></li>
+              <li><a href="{{url_for('loginMerchant')}}">Vendor</a></li>
+              <li><a href="{{url_for('loginCustomer')}}">Customer</a></li>
               
             </ul>
           </li>
 
-          <!-- <li><a href="{{url_for('login')}}">Sign In</a></li> -->
+          
         </ul>
       </nav>
       <a href="{{url_for('cart')}}">

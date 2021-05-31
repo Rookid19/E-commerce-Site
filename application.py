@@ -4,7 +4,7 @@ from flask import Flask, session,render_template,request, Response, redirect, se
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db_init, db
-from models import  User, Product
+from models import  User, Product,Customer
 from datetime import datetime
 from flask_session import Session
 from helpers import login_required
@@ -15,7 +15,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db_init(app)
 
 
-# products page
+# products pagel
 # @app.route('/products2')
 # def products():
 # 	rows = Product.query.all()
@@ -29,7 +29,8 @@ def products():
 
 @app.route('/cart')
 def cart():
-	return render_template('cart.html')
+	rows = Product.query.all()
+	return render_template('cart.html', rows=rows)
 
 
 
@@ -42,10 +43,36 @@ Session(app)
 @app.route("/static/<path:path>")
 def static_dir(path):
     return send_from_directory("static", path)
+# signup for user
+@app.route("/signupUser", methods=["GET","POST"])
+def signupCustomer():
+	if request.method=="POST":
+		session.clear()
+		password = request.form.get("password")
+		repassword = request.form.get("repassword")
+		if(password!=repassword):
+			return render_template("error.html", message="Passwords do not match!")
 
-#signup as merchant
-@app.route("/signup", methods=["GET","POST"])
-def signup():
+		#hash password
+		pw_hash = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
+		
+		fullname = request.form.get("fullname")
+		username = request.form.get("username")
+		#store in database
+		new_user =Customer(fullname=fullname,username=username,password=pw_hash)
+		
+		try:
+			db.session.add(new_user)
+			db.session.commit()
+		except:
+			return render_template("error.html", message="Username already exists!")
+		return render_template("loginUser.html", msg="Account created!")
+	return render_template("signupUser.html")
+
+
+# signup merchant
+@app.route("/signupMerchant", methods=["GET","POST"])
+def signupMerchant():
 	if request.method=="POST":
 		session.clear()
 		password = request.form.get("password")
@@ -60,6 +87,7 @@ def signup():
 		username = request.form.get("username")
 		#store in database
 		new_user =User(fullname=fullname,username=username,password=pw_hash)
+		
 		try:
 			db.session.add(new_user)
 			db.session.commit()
@@ -69,8 +97,8 @@ def signup():
 	return render_template("signup.html")
 
 #login as merchant
-@app.route("/login", methods=["GET", "POST"])
-def login():
+@app.route("/login/merchant", methods=["GET", "POST"])
+def loginMerchant():
 	if request.method=="POST":
 		session.clear()
 		username = request.form.get("username")
@@ -79,18 +107,38 @@ def login():
 		print(result)
 		# Ensure username exists and password is correct
 		if result == None or not check_password_hash(result.password, password):
-			return render_template("error.html", message="Invalid username and/or password")
+			return render_template("errorMerchant.html", message="Invalid username and/or password")
 		# Remember which user has logged in
 		session["username"] = result.username
 		return redirect("/home")
 	return render_template("login.html")
 
-#logout
+
+# LOGIN AS A User
+@app.route("/login/customer", methods=["GET", "POST"])
+def loginCustomer():
+	if request.method=="POST":
+		session.clear()
+		username = request.form.get("username")
+		password = request.form.get("password")
+		result = Customer.query.filter_by(username=username).first()
+		print(result)
+		# Ensure username exists and password is correct
+		if result == None or not check_password_hash(result.password, password):
+			return render_template("errorCustomer.html", message="Invalid username and/or password")
+		# Remember which user has logged in
+		session["username"] = result.username
+		return redirect("/products")
+	return render_template("loginUser.html")
+# logout
 @app.route("/logout")
 def logout():
 	session.clear()
-	return redirect("/login")
-
+	return redirect("/home")
+# @app.route("/logout")
+# def logout():
+# 	session.clear()
+# 	return redirect("/home")
 #view all products
 @app.route("/")
 def index():

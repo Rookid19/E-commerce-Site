@@ -8,6 +8,14 @@ class User(db.Model):
 	def __repr__(self):
 		return '<Name %r>' % self.fullname
 
+class Customer(db.Model):
+	usr_id = db.Column(db.Integer, primary_key=True)
+	fullname = db.Column(db.String(100), nullable=False)
+	username = db.Column(db.String(50), unique=True, nullable=False)
+	password = db.Column(db.String(250), nullable=False)
+	def __repr__(self):
+		return '<Name %r>' % self.fullname
+
 class Product(db.Model):
 	pro_id = db.Column(db.Integer, primary_key=True)
 	category= db.Column(db.String(50), nullable=False)
@@ -18,4 +26,13 @@ class Product(db.Model):
 	filename = db.Column(db.Text, nullable=False, unique=True)
 	username = db.Column(db.String(50), nullable=False)
 	def __repr__(self):
-		return '<Name %r>' % self.name
+		string = f"""
+		{{
+			"name": "{self.name} ",
+			"price":{self.price} ,
+			"inCart": 0,
+			"filename": "{self.filename}",
+		}}
+		"""
+
+		return string
